@@ -9,6 +9,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import CreateAppointment from "../pages/CreateAppointment";
+import VideoCall from "../pages/VideoCall";
 
 const AppRoutes = () => {
   return (
@@ -20,35 +21,40 @@ const AppRoutes = () => {
       <Route
         path="/patient"
         element={
-          <ProtectedRoute allowedRoles={["patient"]}>
+          // <ProtectedRoute allowedRoles={["patient"]}>
             <PatientDashboard />
-          </ProtectedRoute>
+          /* </ProtectedRoute> */
         }
       />
       <Route
         path="/create-appointment"
         element={
-          <ProtectedRoute allowedRoles={["patient"]}>
+          // <ProtectedRoute allowedRoles={["patient"]}>
             <CreateAppointment />
-          </ProtectedRoute>
+          /* </ProtectedRoute> */
         }
       />
-
+      <Route
+        path="/video-call/:roomId"
+        element={
+          < VideoCall/>
+        }
+      />
       <Route
         path="/doctor"
         element={
-          <ProtectedRoute allowedRoles={["doctor"]}>
+          // <ProtectedRoute allowedRoles={["doctor"]}>
             <DoctorDashboard />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         }
       />
 
       <Route
         path="/admin"
         element={
-          <ProtectedRoute allowedRoles={["admin"]}>
+          // <ProtectedRoute allowedRoles={["admin"]}>
             <AdminDashboard />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         }
       />
 

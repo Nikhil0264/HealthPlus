@@ -21,7 +21,6 @@ const PatientDashboard = () => {
    const loggedInUser = useSelector((state) => state.auth.user);
   // const user = user.name;
   // const roomId = "abc";
-
   useEffect(() => {
     dispatch(fetchAppointments());
     

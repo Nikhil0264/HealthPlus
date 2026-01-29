@@ -16,7 +16,6 @@ const socketSlice = createSlice({
                         token:action.payload,
                     },
                 });
-                console.log(socket.id)
             }
             state.connected = true;
         },
