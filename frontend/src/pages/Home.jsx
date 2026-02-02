@@ -6,11 +6,10 @@ import banner from "../public/assets/banner1.jpg";
 const Home = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-  console.log(isAuthenticated)
-  console.log(user)
-  if (isAuthenticated && user) {
-    return <Navigate to={`/${user.role}`} />;
-  }
+
+  // if (isAuthenticated && user) {
+  //   return <Navigate to={`/${user.role}`} />;
+  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50">
@@ -47,7 +46,7 @@ const Home = () => {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              to="/login"
+              to="/register"
               className="px-8 py-4 rounded-xl bg-teal-600 text-white font-semibold shadow-lg hover:bg-teal-700 transition"
             >
               Get Started

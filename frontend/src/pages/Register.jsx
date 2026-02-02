@@ -69,7 +69,7 @@ const Register = () => {
             </label>
             <input
               name="name"
-              placeholder="John Doe"
+              placeholder="Nikhil Padul"
               className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:outline-none"
               onChange={handleChange}
               required
@@ -84,7 +84,7 @@ const Register = () => {
             <input
               name="email"
               type="email"
-              placeholder="john@email.com"
+              placeholder="nikhil@gmail.com"
               className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:outline-none"
               onChange={handleChange}
               required

@@ -4,7 +4,7 @@ import ProtectedRoute from "../components/ProtectRoute"
 import AdminDashboard from "../pages/AdminDashboard"
 import DoctorDashboard from "../pages/DoctorDashboard"
 import PatientDashboard from "../pages/PatientDashboard"
-// import Unauthorized from "../pages/unauthorized";
+import Unauthorized from "../pages/unauthorized";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -17,7 +17,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      
+      <Route path="/home" element={<Home />} />
       <Route
         path="/patient"
         element={
@@ -58,9 +58,10 @@ const AppRoutes = () => {
         }
       />
 
-      {/* <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/undefined" element={<Unauthorized />} />
 
-      <Route path="*" element={<Unauthorized />} /> */}
+      <Route path="*" element={<Unauthorized />} />
     </Routes>
   );
 };

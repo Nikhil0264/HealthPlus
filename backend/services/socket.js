@@ -54,10 +54,14 @@ export const initSocket = (server) => {
       socket.to(roomId).emit("ice-candidate", { candidate });
     });
 
-    socket.on("send-message",(data)=>{
-      console.log(`user ${socket.user.name} joined room ${data.roomId}`);
-      socket.to(data.roomId).emit("receive-message",data)
-    })
+    socket.on("send-message", ({ roomId, message }) => {
+  socket.to(roomId).emit("receive-message", {
+    message,
+    sender: socket.user.role,
+    name: socket.user.name,
+        });
+    });
+
   });
 };
 

@@ -1,31 +1,100 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getSocket } from '../features/socket/socketSlice'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getSocket } from "../features/socket/socketSlice";
 
-const ChatBox = ({roomId}) => {
-    const socket = useSelector(getSocket);
-    const [message,setMessage] = useState('');
-    const [msgs,setMsgs] = useState([]);
+const ChatBox = ({ roomId }) => {
+  const socket = useSelector(getSocket);
+  const user = useSelector((state) => state.auth.user);
 
-    const sendMessage = (e)=>{
-        e.preventDefault();
-        socket.emit("send-message",{message,roomId});
-        console.log(msgs)
-        setMessage("");
-        socket.on("receive-message",(data)=>{ 
-            setMsgs((prev)=>[...prev,data.message])
-        })
-    }
-    
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  // Listen for incoming messages ONLY
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleReceiveMessage = (data) => {
+      setMessages((prev) => [...prev, data]);
+    };
+
+    socket.on("receive-message", handleReceiveMessage);
+
+    return () => socket.off("receive-message", handleReceiveMessage);
+  }, [socket]);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    socket.emit("send-message", {
+      roomId,
+      message,
+    });
+
+    // Optimistic UI
+    setMessages((prev) => [
+      ...prev,
+      {
+        message,
+        sender: user.role,
+        self: true,
+      },
+    ]);
+
+    setMessage("");
+  };
+
   return (
-    <div>
-        {msgs}
-        <h1>My Name</h1>
-        <input placeholder='Enter yout name' value={message} type='text' onChange={(e)=>setMessage(e.target.value)}/>
-        {message}
-        <button onClick={sendMessage}>send</button>
-    </div>
-  )
-}
+    <div className="flex flex-col h-full bg-white rounded-2xl border shadow-sm">
+  
+  {/* Header */}
+  <div className="px-5 py-3 border-b bg-gradient-to-r from-teal-50 to-blue-50 rounded-t-2xl">
+    <h2 className="text-lg font-semibold text-teal-800">
+      {user.role === "doctor" ? "Patient Chat" : "Doctor Chat"}
+    </h2>
+    <p className="text-xs text-gray-500">
+      Secure healthcare conversation
+    </p>
+  </div>
 
-export default ChatBox
+  {/* Messages */}
+  <div className="flex-1 p-5 space-y-3 overflow-y-auto bg-gray-50">
+    {messages.map((msg, index) => (
+      <div
+        key={index}
+        className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm shadow-sm ${
+          msg.self
+            ? "ml-auto bg-teal-600 text-white"
+            : "mr-auto bg-white border text-gray-700"
+        }`}
+      >
+        {msg.message}
+      </div>
+    ))}
+  </div>
+
+  {/* Input */}
+  <form
+    onSubmit={sendMessage}
+    className="p-4 flex gap-3 border-t bg-white rounded-b-2xl"
+  >
+    <input
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      placeholder="Type your message…"
+      className="flex-1 px-4 py-2 rounded-xl border
+        focus:outline-none focus:ring-2 focus:ring-teal-400"
+    />
+    <button
+      className="px-6 py-2 rounded-xl bg-teal-600 text-white font-medium
+        hover:bg-teal-700 transition"
+    >
+      Send
+    </button>
+  </form>
+</div>
+
+  );
+};
+
+export default ChatBox;
