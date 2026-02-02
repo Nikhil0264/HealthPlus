@@ -3,6 +3,7 @@ import { Video } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { connectSocket, getSocket } from "../features/socket/socketSlice";
 import { useNavigate } from "react-router-dom";
+import ChatBox from "./ChatBox";
 
 const SocketDashboard = ({ roomId, user }) => {
   const token = useSelector((state) => state.auth.token);
@@ -38,13 +39,14 @@ const SocketDashboard = ({ roomId, user }) => {
   };
 
   return (
-    <div>
+    <div className="mt-3">
       {user?.role === "doctor" && (
         <button onClick={handleVideoCall}>
           <Video className="inline mr-2" />
           Call
         </button>
       )}
+      <ChatBox value={roomId}/>
     </div>
   );
 };

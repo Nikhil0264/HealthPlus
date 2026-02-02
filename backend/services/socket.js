@@ -53,6 +53,11 @@ export const initSocket = (server) => {
     socket.on("ice-candidate", ({ roomId, candidate }) => {
       socket.to(roomId).emit("ice-candidate", { candidate });
     });
+
+    socket.on("send-message",(data)=>{
+      console.log(`user ${socket.user.name} joined room ${data.roomId}`);
+      socket.to(data.roomId).emit("receive-message",data)
+    })
   });
 };
 
