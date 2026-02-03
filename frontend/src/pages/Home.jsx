@@ -2,11 +2,13 @@ import { Link, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ShieldCheck, CalendarCheck, Stethoscope } from "lucide-react";
 import banner from "../public/assets/banner1.jpg";
+import { useState } from "react";
+import CheckHealth from "./CheckHealth";
 
 const Home = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-
+  const [chatWithAi,setChatWithAi] = useState(false);
   // if (isAuthenticated && user) {
   //   return <Navigate to={`/${user.role}`} />;
   // }
@@ -58,9 +60,23 @@ const Home = () => {
             >
               Book Appointment
             </Link>
+            <button
+              onClick={() => setChatWithAi(true)}
+              className="px-8 py-4 rounded-xl 
+                        bg-teal-600 text-white font-semibold 
+                        shadow-lg hover:shadow-xl 
+                        transition flex items-center gap-2"
+            >
+              <span className="text-lg">🩺</span>
+              Chat with AI
+            </button>
           </div>
 
-          
+          {chatWithAi && (
+              <div className="fixed bottom-24 right-6 z-50">
+                <CheckHealth onClose={() => setChatWithAi(false)} />
+              </div>
+            )}
           <div className="mt-10 flex gap-6">
             <TrustItem
               icon={<ShieldCheck className="w-5 h-5 text-teal-600" />}
@@ -94,6 +110,7 @@ const Home = () => {
       <footer className="text-center py-6 text-sm text-gray-400">
         © {new Date().getFullYear()} Healthplus. Trusted digital healthcare.
       </footer>
+      
     </div>
   );
 };
