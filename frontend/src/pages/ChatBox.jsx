@@ -1,37 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getSocket } from "../features/socket/socketSlice";
+import api from "../services/api";
 
-const ChatBox = ({ roomId }) => {
-  const socket = useSelector(getSocket);
-  const user = useSelector((state) => state.auth.user);
-
+const ChatBox = () => {
+  
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   // Listen for incoming messages ONLY
-  useEffect(() => {
-    if (!socket) return;
 
-    const handleReceiveMessage = (data) => {
-      setMessages((prev) => [...prev, data]);
-    };
 
-    socket.on("receive-message", handleReceiveMessage);
-
-    return () => socket.off("receive-message", handleReceiveMessage);
-  }, [socket]);
-
-  const sendMessage = (e) => {
+  const sendMessage = async(e) => {
     e.preventDefault();
     if (!message.trim()) return;
+    console.log(message)
+    const userMessage = message;
 
-    socket.emit("send-message", {
-      roomId,
-      message,
-    });
 
-    // Optimistic UI
+    
     setMessages((prev) => [
       ...prev,
       {
@@ -42,6 +29,17 @@ const ChatBox = ({ roomId }) => {
     ]);
 
     setMessage("");
+    try{
+      const res = await api.post("/chat",{message:userMessage});
+
+      setMessages((prev)=>[
+        ...prev,{message:res.data.text,sender:"ai",self:"false"}
+      ]);
+      console.log("exectuation succesfully",res)
+    }catch(error){
+      console.log(error);
+      setMessages((prev) =>[...prev,{message:"currently ai is not responding",sender:"ai",self:false}])
+    }
   };
 
   return (
@@ -88,6 +86,7 @@ const ChatBox = ({ roomId }) => {
     <button
       className="px-6 py-2 rounded-xl bg-teal-600 text-white font-medium
         hover:bg-teal-700 transition"
+        onClick={sendMessage}
     >
       Send
     </button>
