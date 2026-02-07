@@ -4,15 +4,15 @@ import { getSocket } from "../features/socket/socketSlice";
 import api from "../services/api";
 
 const ChatBox = () => {
-  
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   // Listen for incoming messages ONLY
 
-
+  const user = useSelector((state)=>state.auth.user)
   const sendMessage = async(e) => {
     e.preventDefault();
+    console.log(message)
     if (!message.trim()) return;
     console.log(message)
     const userMessage = message;
