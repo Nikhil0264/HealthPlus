@@ -11,11 +11,18 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await api.post("/auth/login", { email, password });
-    dispatch(login(res.data));
-    navigate(`/${res.data.user.role}`);
+    setError("");
+    try {
+      const res = await api.post("/auth/login", { email, password });
+      dispatch(login(res.data));
+      navigate(`/${res.data.user.role}`);
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -38,6 +45,12 @@ const Login = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl text-sm">
+                {error}
+              </div>
+            )}
 
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />

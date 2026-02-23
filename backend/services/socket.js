@@ -14,15 +14,19 @@ export const initSocket = (server) => {
   });
 
   io.use(async (socket, next) => {
-    const token = socket.handshake.auth?.token;
-    if (!token) return next(new Error("No token"));
+    try {
+      const token = socket.handshake.auth?.token;
+      if (!token) return next(new Error("No token"));
 
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.userId);
-    if (!user) return next(new Error("Unauthorized"));
+      const decoded = jwt.verify(token, JWT_SECRET);
+      const user = await User.findById(decoded.userId);
+      if (!user) return next(new Error("Unauthorized"));
 
-    socket.user = user;
-    next();
+      socket.user = user;
+      next();
+    } catch (error) {
+      return next(new Error("Invalid or expired token"));
+    }
   });
 
   io.on("connection", (socket) => {
@@ -33,8 +37,8 @@ export const initSocket = (server) => {
 
     socket.on("requesting-video-call", ({ roomId }) => {
       console.log("video call requested");
-       if (socket.user.role !== "doctor") return;
-       console.log("emitting incoming-video-call");
+      if (socket.user.role !== "doctor") return;
+      console.log("emitting incoming-video-call");
       socket.to(roomId).emit("incoming-video-call", { roomId });
     });
 
@@ -55,11 +59,11 @@ export const initSocket = (server) => {
     });
 
     socket.on("send-message", ({ roomId, message }) => {
-  socket.to(roomId).emit("receive-message", {
-    message,
-    sender: socket.user.role,
-    name: socket.user.name,
-        });
+      socket.to(roomId).emit("receive-message", {
+        message,
+        sender: socket.user.role,
+        name: socket.user.name,
+      });
     });
 
   });
