@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useDispatch } from 'react-redux';
 import { fetchAppointments } from '../features/appointment/appointmentSlice';
 import { useNavigate } from 'react-router-dom';
-import PatientDashboard from './PatientDashboard';
 
 const CreateAppointment = () => {
 
@@ -22,7 +21,6 @@ const CreateAppointment = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [complete,setComplete] = useState(false);
 
 
   useEffect(()=>{
@@ -53,8 +51,7 @@ const CreateAppointment = () => {
         setLoading(true);
         await api.post('/appointments',form);
         dispatch(fetchAppointments());
-        setComplete(true)
-        navigate('/patient')
+        navigate('/patient');
     }catch(err){
         setError(err.response?.data?.message || "Appointment failed");
     }finally{

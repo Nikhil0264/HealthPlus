@@ -35,7 +35,7 @@ const DoctorChat = ({ roomId, patient }) => {
       socket.off("connect", onConnect);
       socket.off("receive-message");
     };
-  }, [dispatch, authUser.token, roomId, doctor._id]);
+  }, [dispatch, authUser.token, roomId, doctor._id, doctor.name]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });

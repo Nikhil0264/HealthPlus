@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Lobby = ({room,user}) => {
+const Lobby = () => {
   return (
     <div>
       <h1>Lobby</h1>
